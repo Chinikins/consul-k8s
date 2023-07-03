@@ -159,3 +159,27 @@ load _helpers
   [ "${actualTemplateFoo}" = "bar" ]
   [ "${actualTemplateBaz}" = "qux" ]
 }
+
+#--------------------------------------------------------------------
+# server.containerSecurityContext.aclInit
+
+@test "serverACLInitCleanup/Job: securityContext is set when server.containerSecurityContext.aclInit is set" {
+  cd `chart_dir`
+  local security_context=$(helm template \
+      -s templates/server-acl-init-cleanup-job.yaml \
+      --set 'global.acls.manageSystemACLs=true' \
+      --set 'server.containerSecurityContext.aclInit.runAsNonRoot=true' \
+      --set 'server.containerSecurityContext.aclInit.runAsUser=100' \
+      --set 'server.containerSecurityContext.aclInit.runAsGroup=1000' \
+      . | tee /dev/stderr |
+      yq -r '.spec.template.spec.securityContext' | tee /dev/stderr)
+
+  local actual=$(echo $security_context | jq -r .runAsNonRoot)
+  [ "${actual}" = "true" ]
+
+  local actual=$(echo $security_context | jq -r .runAsUser)
+  [ "${actual}" = "100" ]
+
+  local actual=$(echo $security_context | jq -r .runAsGroup)
+  [ "${actual}" = "1000" ]
+}
