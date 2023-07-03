@@ -379,6 +379,18 @@ global:
       # @type: string
       secretKey: null
 
+    # This value defines additional annotations for
+    # tls init jobs. This should be formatted as a multi-line string.
+    #
+    # ```yaml
+    # annotations: |
+    #   "sample/annotation1": "foo"
+    #   "sample/annotation2": "bar"
+    # ```
+    #
+    # @type: string
+    annotations: null
+
   # [Enterprise Only] `enableConsulNamespaces` indicates that you are running
   # Consul Enterprise v1.7+ with a valid Consul Enterprise license and would
   # like to make use of configuration beyond registering everything into
@@ -462,6 +474,18 @@ global:
     #
     # @type: string
     nodeSelector: null
+
+    # This value defines additional annotations for
+    # acl init jobs. This should be formatted as a multi-line string.
+    #
+    # ```yaml
+    # annotations: |
+    #   "sample/annotation1": "foo"
+    #   "sample/annotation2": "bar"
+    # ```
+    #
+    # @type: string
+    annotations: null
 
   # [Enterprise Only] This value refers to a Kubernetes or Vault secret that you have created
   # that contains your enterprise license. It is required if you are using an
@@ -832,6 +856,14 @@ server:
     # @type: map
     # @recurse: false
     server: null
+    # The acl-init job
+    # @type: map
+    # @recurse: false
+    aclInit: null
+    # The tls-init job
+    # @type: map
+    # @recurse: false
+    tlsInit: null
 
   # This value is used to carefully
   # control a rolling update of Consul server agents. This value specifies the
@@ -950,14 +982,14 @@ server:
           topologyKey: kubernetes.io/hostname
 
   # Toleration settings for server pods. This
-  # should be a multi-line string matching the 
-  # [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) 
+  # should be a multi-line string matching the
+  # [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/)
   # array in a Pod spec.
   tolerations: ""
 
   # Pod topology spread constraints for server pods.
-  # This should be a multi-line YAML string matching the 
-  # [`topologySpreadConstraints`](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/) 
+  # This should be a multi-line YAML string matching the
+  # [`topologySpreadConstraints`](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)
   # array in a Pod Spec.
   #
   # This requires K8S >= 1.18 (beta) or 1.19 (stable).
@@ -1076,7 +1108,7 @@ server:
   # @type: map
   extraEnvironmentVars: { }
 
-  # [Enterprise Only] Values for setting up and running 
+  # [Enterprise Only] Values for setting up and running
   # [snapshot agents](https://developer.hashicorp.com/consul/commands/snapshot/agent)
   # within the Consul clusters. They run as a sidecar with Consul servers.
   snapshotAgent:
@@ -1950,7 +1982,7 @@ connectInject:
     logLevel: null
 
     # Set the namespace to install the CNI plugin into. Overrides global namespace settings for CNI resources.
-    # Ex: "kube-system" 
+    # Ex: "kube-system"
     # @type: string
     namespace: null
 
@@ -2133,7 +2165,7 @@ connectInject:
     # @type: string
     annotations: null
 
-  # The resource settings for connect inject pods. The defaults, are optimized for getting started worklows on developer deployments. The settings should be tweaked for production deployments. 
+  # The resource settings for connect inject pods. The defaults, are optimized for getting started worklows on developer deployments. The settings should be tweaked for production deployments.
   # @type: map
   resources:
     requests:
@@ -2331,8 +2363,8 @@ connectInject:
         cpu: null
 
   # The resource settings for the Connect injected init container. If null, the resources
-  # won't be set for the initContainer. The defaults are optimized for developer instances of 
-  # Kubernetes, however they should be tweaked with the recommended defaults as shown below to speed up service registration times. 
+  # won't be set for the initContainer. The defaults are optimized for developer instances of
+  # Kubernetes, however they should be tweaked with the recommended defaults as shown below to speed up service registration times.
   # @type: map
   initContainer:
     resources:
@@ -2521,7 +2553,7 @@ meshGateway:
   tolerations: null
 
   # Pod topology spread constraints for mesh gateway pods.
-  # This should be a multi-line YAML string matching the 
+  # This should be a multi-line YAML string matching the
   # [`topologySpreadConstraints`](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)
   # array in a Pod Spec.
   #
@@ -2668,7 +2700,7 @@ ingressGateways:
     tolerations: null
 
     # Pod topology spread constraints for ingress gateway pods.
-    # This should be a multi-line YAML string matching the 
+    # This should be a multi-line YAML string matching the
     # [`topologySpreadConstraints`](https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/)
     # array in a Pod Spec.
     #
@@ -2905,7 +2937,7 @@ apiGateway:
     # @type: string
     nodeSelector: null
 
-    # Toleration settings for gateway pods created with the managed gateway class. 
+    # Toleration settings for gateway pods created with the managed gateway class.
     # This should be a multi-line string matching the
     # [Tolerations](https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/) array in a Pod spec.
     #
