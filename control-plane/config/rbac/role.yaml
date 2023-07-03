@@ -29,6 +29,26 @@ rules:
 - apiGroups:
   - consul.hashicorp.com
   resources:
+  - controlplanerequestlimits
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - consul.hashicorp.com
+  resources:
+  - controlplanerequestlimits/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - consul.hashicorp.com
+  resources:
   - exportedservices
   verbs:
   - create
@@ -62,6 +82,26 @@ rules:
   - consul.hashicorp.com
   resources:
   - ingressgateways/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - consul.hashicorp.com
+  resources:
+  - jwtproviders
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - consul.hashicorp.com
+  resources:
+  - jwtproviders/status
   verbs:
   - get
   - patch
@@ -142,6 +182,26 @@ rules:
   - consul.hashicorp.com
   resources:
   - proxydefaults/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - consul.hashicorp.com
+  resources:
+  - samenessgroups
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - patch
+  - update
+  - watch
+- apiGroups:
+  - consul.hashicorp.com
+  resources:
+  - samenessgroups/status
   verbs:
   - get
   - patch

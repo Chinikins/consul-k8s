@@ -34,17 +34,25 @@ type TestFlags struct {
 
 	flagEnableTransparentProxy bool
 
-	flagHelmChartVersion string
-	flagConsulImage      string
-	flagConsulK8sImage   string
-	flagConsulVersion    string
-	flagEnvoyImage       string
+	flagHelmChartVersion       string
+	flagConsulImage            string
+	flagConsulK8sImage         string
+	flagConsulDataplaneImage   string
+	flagConsulVersion          string
+	flagConsulDataplaneVersion string
+	flagEnvoyImage             string
+	flagConsulCollectorImage   string
+	flagVaultHelmChartVersion  string
+	flagVaultServerVersion     string
+
+	flagHCPResourceID string
 
 	flagNoCleanupOnFailure bool
 
 	flagDebugDirectory string
 
 	flagUseAKS  bool
+	flagUseEKS  bool
 	flagUseGKE  bool
 	flagUseKind bool
 
@@ -69,9 +77,16 @@ func (t *TestFlags) init() {
 
 	flag.StringVar(&t.flagConsulImage, "consul-image", "", "The Consul image to use for all tests.")
 	flag.StringVar(&t.flagConsulK8sImage, "consul-k8s-image", "", "The consul-k8s image to use for all tests.")
+	flag.StringVar(&t.flagConsulDataplaneImage, "consul-dataplane-image", "", "The consul-dataplane image to use for all tests.")
 	flag.StringVar(&t.flagConsulVersion, "consul-version", "", "The consul version used for all tests.")
+	flag.StringVar(&t.flagConsulDataplaneVersion, "consul-dataplane-version", "", "The consul-dataplane version used for all tests.")
 	flag.StringVar(&t.flagHelmChartVersion, "helm-chart-version", config.HelmChartPath, "The helm chart used for all tests.")
 	flag.StringVar(&t.flagEnvoyImage, "envoy-image", "", "The Envoy image to use for all tests.")
+	flag.StringVar(&t.flagConsulCollectorImage, "consul-collector-image", "", "The consul collector image to use for all tests.")
+	flag.StringVar(&t.flagVaultServerVersion, "vault-server-version", "", "The vault serverversion used for all tests.")
+	flag.StringVar(&t.flagVaultHelmChartVersion, "vault-helm-chart-version", "", "The Vault helm chart used for all tests.")
+
+	flag.StringVar(&t.flagHCPResourceID, "hcp-resource-id", "", "The hcp resource id to use for all tests.")
 
 	flag.BoolVar(&t.flagEnableMultiCluster, "enable-multi-cluster", false,
 		"If true, the tests that require multiple Kubernetes clusters will be run. "+
@@ -111,6 +126,8 @@ func (t *TestFlags) init() {
 
 	flag.BoolVar(&t.flagUseAKS, "use-aks", false,
 		"If true, the tests will assume they are running against an AKS cluster(s).")
+	flag.BoolVar(&t.flagUseEKS, "use-eks", false,
+		"If true, the tests will assume they are running against an EKS cluster(s).")
 	flag.BoolVar(&t.flagUseGKE, "use-gke", false,
 		"If true, the tests will assume they are running against a GKE cluster(s).")
 	flag.BoolVar(&t.flagUseKind, "use-kind", false,
@@ -142,6 +159,8 @@ func (t *TestFlags) TestConfigFromFlags() *config.TestConfig {
 
 	// if the Version is empty consulVersion will be nil
 	consulVersion, _ := version.NewVersion(t.flagConsulVersion)
+	consulDataplaneVersion, _ := version.NewVersion(t.flagConsulDataplaneVersion)
+	//vaultserverVersion, _ := version.NewVersion(t.flagVaultServerVersion)
 
 	return &config.TestConfig{
 		Kubeconfig:    t.flagKubeconfig,
@@ -166,15 +185,23 @@ func (t *TestFlags) TestConfigFromFlags() *config.TestConfig {
 
 		DisablePeering: t.flagDisablePeering,
 
-		HelmChartVersion: t.flagHelmChartVersion,
-		ConsulImage:      t.flagConsulImage,
-		ConsulK8SImage:   t.flagConsulK8sImage,
-		ConsulVersion:    consulVersion,
-		EnvoyImage:       t.flagEnvoyImage,
+		HelmChartVersion:       t.flagHelmChartVersion,
+		ConsulImage:            t.flagConsulImage,
+		ConsulK8SImage:         t.flagConsulK8sImage,
+		ConsulDataplaneImage:   t.flagConsulDataplaneImage,
+		ConsulVersion:          consulVersion,
+		ConsulDataplaneVersion: consulDataplaneVersion,
+		EnvoyImage:             t.flagEnvoyImage,
+		ConsulCollectorImage:   t.flagConsulCollectorImage,
+		VaultHelmChartVersion:  t.flagVaultHelmChartVersion,
+		VaultServerVersion:     t.flagVaultServerVersion,
+
+		HCPResourceID: t.flagHCPResourceID,
 
 		NoCleanupOnFailure: t.flagNoCleanupOnFailure,
 		DebugDirectory:     tempDir,
 		UseAKS:             t.flagUseAKS,
+		UseEKS:             t.flagUseEKS,
 		UseGKE:             t.flagUseGKE,
 		UseKind:            t.flagUseKind,
 	}
