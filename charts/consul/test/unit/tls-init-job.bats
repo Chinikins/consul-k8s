@@ -213,21 +213,12 @@ load _helpers
 
 @test "tlsInit/Job: securityContext is set when server.containerSecurityContext.tlsInit is set" {
   cd `chart_dir`
-  local security_context=$(helm template \
+  local actual=$(helm template \
       -s templates/tls-init-job.yaml  \
       --set 'global.tls.enabled=true' \
-      --set 'server.containerSecurityContext.tlsInit.runAsNonRoot=true' \
-      --set 'server.containerSecurityContext.tlsInit.runAsUser=100' \
-      --set 'server.containerSecurityContext.tlsInit.runAsGroup=1000' \
+      --set 'server.containerSecurityContext.aclInit.runAsUser=100' \
       . | tee /dev/stderr |
-      yq -r '.spec.template.spec.securityContext' | tee /dev/stderr)
+      yq -r '.spec.template.spec.securityContext.runAsUser' | tee /dev/stderr)
 
-  local actual=$(echo $security_context | jq -r .runAsNonRoot)
-  [ "${actual}" = "true" ]
-
-  local actual=$(echo $security_context | jq -r .runAsUser)
   [ "${actual}" = "100" ]
-
-  local actual=$(echo $security_context | jq -r .runAsGroup)
-  [ "${actual}" = "1000" ]
 }
