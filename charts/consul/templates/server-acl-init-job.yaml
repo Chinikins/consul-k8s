@@ -99,7 +99,7 @@ spec:
       serviceAccountName: {{ template "consul.fullname" . }}-server-acl-init
       {{- if .Values.server.containerSecurityContext.aclInit }}
       securityContext:
-        {{- toYaml .Values.server.containerSecurityContext.aclInit | nindent 10 }}
+        {{- toYaml .Values.server.containerSecurityContext.aclInit | nindent 8 }}
       {{- end }}
       {{- if (or .Values.global.tls.enabled .Values.global.acls.replicationToken.secretName .Values.global.acls.bootstrapToken.secretName) }}
       volumes:

@@ -43,7 +43,7 @@ spec:
       serviceAccountName: {{ template "consul.fullname" . }}-tls-init-cleanup
       {{- if .Values.server.containerSecurityContext.tlsInit }}
       securityContext:
-        {{- toYaml .Values.server.containerSecurityContext.tlsInit | nindent 10 }}
+        {{- toYaml .Values.server.containerSecurityContext.tlsInit | nindent 8 }}
       {{- end }}
       containers:
         - name: tls-init-cleanup

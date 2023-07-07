@@ -55,7 +55,7 @@ spec:
       serviceAccountName: {{ template "consul.fullname" . }}-server-acl-init-cleanup
       {{- if .Values.server.containerSecurityContext.aclInit }}
       securityContext:
-        {{- toYaml .Values.server.containerSecurityContext.aclInit | nindent 10 }}
+        {{- toYaml .Values.server.containerSecurityContext.aclInit | nindent 8 }}
       {{- end }}
       containers:
         - name: server-acl-init-cleanup
